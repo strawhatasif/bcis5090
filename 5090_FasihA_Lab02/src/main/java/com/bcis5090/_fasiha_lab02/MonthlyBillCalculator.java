@@ -110,10 +110,7 @@ public class MonthlyBillCalculator {
             packageType = packageType.toUpperCase();
 
             /**
-             * This switch statement is responsible for calculating the additional charge for select packages.
-             * This relies on the package and hoursUsed.
-             *
-             * The default charge is 0.00
+             * This switch statement assigns the base package cost based on the package type
              */
             basePackageCost = switch (packageType) {
                 case "A":
