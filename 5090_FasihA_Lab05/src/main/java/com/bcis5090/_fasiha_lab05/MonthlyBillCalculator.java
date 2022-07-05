@@ -1,11 +1,3 @@
-/*
-Asif Fasih
-001040771
-August 03, 2022
-July 05, 2022
-This program calculates a customer's monthly bill based on usage, location (zip code, county), and package
-*/
-
 package com.bcis5090._fasiha_lab05;
 
 import java.util.Scanner;
@@ -78,15 +70,16 @@ public class MonthlyBillCalculator {
             
             //Instantiate a MonthlyBill class
             //Convert county name and package type values to uppercase just in case users entered lower case values.
-            var monthlyBill = new MonthlyBill(hoursUsed, zipCode.charAt(0), countyName.toUpperCase(), Character.toUpperCase(packageType.charAt(0)));
+            var bill = new Bill(hoursUsed, zipCode.charAt(0), countyName.toUpperCase(), Character.toUpperCase(packageType.charAt(0)));
+            var monthlyBill = new MonthlyBill();
 
-            monthlyBill.determineBaseCharge();
-            monthlyBill.calculateAdditionalCharge();
-            monthlyBill.determineZipCodeSurcharge();
-            monthlyBill.calculateSubtotal();
-            monthlyBill.determineCountyDiscountPercentage();
+            monthlyBill.determineBaseCharge(bill.packageType());
+            monthlyBill.calculateAdditionalCharge(bill.packageType(), bill.hoursUsed());
+            monthlyBill.determineZipCodeSurcharge(bill.zipCode());
+            monthlyBill.calculateSubtotal(bill.packageType(), bill.hoursUsed(), bill.zipCode());
+            monthlyBill.determineCountyDiscountPercentage(bill.countyName());
             
-            var countyDiscount = monthlyBill.calculateDiscountAmount();
+            var countyDiscount = monthlyBill.calculateDiscountAmount(bill.packageType(), bill.hoursUsed(), bill.zipCode(), bill.countyName());
             var billTotal = monthlyBill.calculateBillTotal();
             
             //Add the current discount to the running total for discount
@@ -96,8 +89,8 @@ public class MonthlyBillCalculator {
             
             totalCustomers++;
             
-            monthlyBill.displayOutputForBill();
-            monthlyBill.calculateAndDisplayPotentialSavings();
+            monthlyBill.displayOutputForBill(bill.packageType(), bill.zipCode(), bill.countyName());
+            monthlyBill.calculateAndDisplayPotentialSavings(bill.packageType(), bill.hoursUsed(), bill.countyName());
         }
 
         //Handling edge case where a user enters -1 for hoursUsed at the beginning

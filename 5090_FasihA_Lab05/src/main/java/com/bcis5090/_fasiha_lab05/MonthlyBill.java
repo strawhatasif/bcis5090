@@ -1,10 +1,3 @@
-/*
-Asif Fasih
-001040771
-August 03, 2022
-July 05, 2022
-This class contains attributes used by  MonthlyBillCalculator.java
- */
 package com.bcis5090._fasiha_lab05;
 
 public class MonthlyBill {
@@ -16,80 +9,26 @@ public class MonthlyBill {
     private final double PACKAGE_B_ADDITIONAL_COST_PER_HOUR = 1.00;
     private final double PACKAGE_C_COST = 19.95;
 
-    private int hoursUsed;
-    private char zipCode;
-    private String countyName;
-    private char packageType;
+    double basePackageCost;
+    double additionalPackageCost;
+    double subtotal;
+    double countyDiscount;
+    double billTotal;
+    double surcharge;
 
     /**
-     * Default constructor that does not accept any arguments.
+     * No argument constructor
      */
-    public MonthlyBill() {
-        //Initialize values with defaults.
-        hoursUsed = 0;
-        zipCode = ' ';
-        countyName = "";
-        packageType = ' ';
-    }
-
-    /**
-     * Parameterized constructor that uses parameters to assign values.
-     *
-     * @param hoursUsed
-     * @param zipCode
-     * @param countyName
-     * @param packageType
-     */
-    public MonthlyBill(int hoursUsed, char zipCode, String countyName, char packageType) {
-
-        //Use of the 'this' keyword in Constructors is an industry best practice from my experience.
-        //The concept is also covered on p. 567 in the 6th edition (Chapter 8).
-        //This practice solves the shadowing problem.
-        this.hoursUsed = hoursUsed;
-        this.zipCode = zipCode;
-        this.countyName = countyName;
-        this.packageType = packageType;
-    }
-
-    public int getHoursUsed() {
-        return hoursUsed;
-    }
-
-    public void setHoursUsed(int hoursUsed) {
-        this.hoursUsed = hoursUsed;
-    }
-
-    public char getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(char zipCode) {
-        this.zipCode = zipCode;
-    }
-
-    public String getCountyName() {
-        return countyName;
-    }
-
-    public void setCountyName(String countyName) {
-        this.countyName = countyName;
-    }
-
-    public char getPackageType() {
-        return packageType;
-    }
-
-    public void setPackageType(char packageType) {
-        this.packageType = packageType;
-    }
+    public MonthlyBill() { }
 
     /**
      * This method determines the base charge based on package type.
      *
+     * @param packageType
      * @return double - base charge, with the default as 0.00
      */
-    protected double determineBaseCharge() {
-        return switch (getPackageType()) {
+    protected double determineBaseCharge(char packageType) {
+        return switch (packageType) {
             case 'A':
                 yield PACKAGE_A_COST;
             case 'B':
@@ -105,17 +44,17 @@ public class MonthlyBill {
      * This method determines the additional charge based on package type and
      * hours used entered.
      *
+     * @param packageType
+     * @param hours
      * @return double - the calculated additional charge, with the default being
      * 0.00
      */
-    protected double calculateAdditionalCharge() {
-        double customerPackage = getPackageType();
-        int hours = getHoursUsed();
-
+    protected double calculateAdditionalCharge(char packageType, int hours) {
         double additionalCharge = 0.00;
-        if ('A' == customerPackage && hours > 10) {
+        if ('A' == packageType && hours > 10) {
             additionalCharge = (hours - 10) * PACKAGE_A_ADDITIONAL_COST_PER_HOUR;
-        } else if ('B' == customerPackage && hours > 20) {
+        } 
+        else if ('B' == packageType && hours > 20) {
             additionalCharge = (hours - 20) * PACKAGE_B_ADDITIONAL_COST_PER_HOUR;
         }
 
@@ -125,10 +64,11 @@ public class MonthlyBill {
     /**
      * This method assigns a surcharge for certain zip codes.
      *
-     * @return surcharge - the default surcharge is 0.00
+     * @param zipCode
+     * @return calculated surcharge
      */
-    protected double determineZipCodeSurcharge() {
-        return switch (getZipCode()) {
+    protected double determineZipCodeSurcharge(char zipCode) {
+        surcharge = switch (zipCode) {
             case '3':
                 yield 1.50;
             case '5':
@@ -138,24 +78,31 @@ public class MonthlyBill {
             default:
                 yield 0.00;
         };
+
+        return surcharge;
     }
 
     /**
      * Adds up base charge, additional charge, and surcharge and returns the
      * subtotal sum.
      *
-     * @return subtotal
+     * @param packageType
+     * @param hoursUsed
+     * @param zipCode
+     * @return
      */
-    protected double calculateSubtotal() {
-        return determineBaseCharge() + calculateAdditionalCharge() + determineZipCodeSurcharge();
+    protected double calculateSubtotal(char packageType, int hoursUsed, char zipCode) {
+        subtotal = determineBaseCharge(packageType) + calculateAdditionalCharge(packageType, hoursUsed) + determineZipCodeSurcharge(zipCode);
+        return subtotal;
     }
 
     /**
      *
+     * @param countyName
      * @return countyDiscountPercentage - the default percentage is 0.00
      */
-    protected double determineCountyDiscountPercentage() {
-        return switch (getCountyName()) {
+    protected double determineCountyDiscountPercentage(String countyName) {
+        return switch (countyName) {
             case "COMANCHE":
                 yield 0.05;
             case "PARKER":
@@ -171,10 +118,15 @@ public class MonthlyBill {
      * Multiplies the subtotal and county discount percentage and returns the
      * product.
      *
-     * @return discountAmount
+     * @param packageType
+     * @param hoursUsed
+     * @param zipCode
+     * @param countyName
+     * @return
      */
-    protected double calculateDiscountAmount() {
-        return calculateSubtotal() * determineCountyDiscountPercentage();
+    protected double calculateDiscountAmount(char packageType, int hoursUsed, char zipCode, String countyName) {
+        countyDiscount = calculateSubtotal(packageType, hoursUsed, zipCode) * determineCountyDiscountPercentage(countyName);
+        return countyDiscount;
     }
 
     /**
@@ -184,7 +136,8 @@ public class MonthlyBill {
      * @return billTotal
      */
     protected double calculateBillTotal() {
-        return calculateSubtotal() - calculateDiscountAmount();
+        billTotal = subtotal - countyDiscount;
+        return billTotal;
     }
 
     /**
@@ -193,15 +146,11 @@ public class MonthlyBill {
      * the String.format method to accomplish formatting. Tab escape sequences
      * assist with consistent layout for a better user experience.
      *
+     * @param packageType
+     * @param zipCode
+     * @param countyName
      */
-    protected void displayOutputForBill() {
-        double basePackageCost = determineBaseCharge();
-        double additionalPackageCost = calculateAdditionalCharge();
-        double surcharge = determineZipCodeSurcharge();
-        double subtotal = calculateSubtotal();
-        double countyDiscount = calculateDiscountAmount();
-        double billTotal = calculateBillTotal();
-
+    protected void displayOutputForBill(char packageType, char zipCode, String countyName) {
         //Note: \t is a horizontal tab escape sequence. Each represents one tab
         //Display base package cost
         System.out.println("Base Charge for Package " + packageType + ": \t\t\t"
@@ -233,8 +182,11 @@ public class MonthlyBill {
      * method uses the String.format method to accomplish formatting. Tab escape
      * sequences assist with consistent layout for a better user experience.
      *
+     * @param packageType
+     * @param hoursUsed
+     * @param countyName
      */
-    protected void calculateAndDisplayPotentialSavings() {
+    protected void calculateAndDisplayPotentialSavings(char packageType, int hoursUsed, String countyName) {
         //Instantiate the MonthlyBillCalculator class to access the accumulator variables.
         var monthlyBillCalculator = new MonthlyBillCalculator();
 
@@ -258,22 +210,17 @@ public class MonthlyBill {
         //Display running total for the number of customers.
         System.out.println("Total Customers: \t\t\t\t" + totalCustomers + "\n");
 
-        double billTotal = calculateBillTotal();
-        char customerPackage = getPackageType();
-        int hours = getHoursUsed();
-        
-        double surcharge = determineZipCodeSurcharge();
-        double countyDiscountPercentage = determineCountyDiscountPercentage();
+        double countyDiscountPercentage = determineCountyDiscountPercentage(countyName);
 
         //Calculate and display other package potential savings 
         //for customers of Package A IF they are eligible
-        if ('A' == customerPackage && hours >= 20) {
+        if ('A' == packageType && hoursUsed >= 20) {
             //If the total cost of the bill is greater than the base price of package B
             //determine the cost of package B (including the additional cost and surcharge)
             //then, subtract that from the total for package A.
             if (billTotal > PACKAGE_B_COST) {
 
-                var subtotalForPackageB = PACKAGE_B_COST + ((hours - 20) * 1) + surcharge;
+                var subtotalForPackageB = PACKAGE_B_COST + ((hoursUsed - 20) * 1) + surcharge;
 
                 var discountAmount = subtotalForPackageB * countyDiscountPercentage;
 
@@ -301,14 +248,14 @@ public class MonthlyBill {
         } 
         //Calculate and display other package potential savings 
         //for customers of Package B IF they are eligible
-        else if ('B' == customerPackage && getHoursUsed() > 20) {
+        else if ('B' == packageType && hoursUsed > 20) {
             //If the total cost of the bill is greater than the base price of package C
             //determine the cost of package B (including the surcharge)
             //then, subtract that from the total for package B.
             if (billTotal > PACKAGE_C_COST) {
-                var subtotalForPackageC = PACKAGE_C_COST + determineZipCodeSurcharge();
+                var subtotalForPackageC = PACKAGE_C_COST + surcharge;
 
-                var discountAmount = subtotalForPackageC * determineCountyDiscountPercentage();
+                var discountAmount = subtotalForPackageC * countyDiscountPercentage;
 
                 var totalForPackageC = subtotalForPackageC - discountAmount;
 
