@@ -11,17 +11,18 @@ import java.util.Scanner;
 
 public class MonthlyBillCalculator {
 
-    //Package costs, including additional cost per hour for some packages
-    private static final double PACKAGE_A_COST = 9.95;
-    private static final double PACKAGE_A_ADDITIONAL_COST_PER_HOUR = 2.00;
-    private static final double PACKAGE_B_COST = 13.95;
-    private static final double PACKAGE_B_ADDITIONAL_COST_PER_HOUR = 1.00;
-    private static final double PACKAGE_C_COST = 19.95;
-
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        //Package costs, including additional cost per hour for some packages
+        final var PACKAGE_A_COST = 9.95;
+        final var PACKAGE_A_ADDITIONAL_COST_PER_HOUR = 2.00;
+        final var PACKAGE_B_COST = 13.95;
+        final var PACKAGE_B_ADDITIONAL_COST_PER_HOUR = 1.00;
+        final var PACKAGE_C_COST = 19.95;
+    
         var scanner = new Scanner(System.in);
 
         double surcharge;
@@ -43,7 +44,7 @@ public class MonthlyBillCalculator {
         System.out.println("Enter zip code: ");
         var zipCode = scanner.nextLine();
 
-        //The first characater of the zip code cannot be less than or equal to zero!
+        //The first character of the zip code cannot be less than or equal to zero!
         if (zipCode.charAt(0) <= '0') {
             System.out.println("Incorrect zip code entered. Please try again.");
             return;
@@ -110,7 +111,7 @@ public class MonthlyBillCalculator {
             packageType = packageType.toUpperCase();
 
             /**
-             * This switch statement assigns the base package cost based on the package type
+             * This switch statement assigns the base package cost based on the package type    
              */
             basePackageCost = switch (packageType) {
                 case "A":
@@ -129,12 +130,6 @@ public class MonthlyBillCalculator {
                     + String.format("$%,.2f", basePackageCost));
 
             //Calculate and display additional charge based on provided input
-            /**
-             * Responsible for calculating the additional charge for select packages. 
-             * This relies on the package and hoursUsed. 
-             * 
-             * The default charge is 0.00
-             */
             if ("a".equalsIgnoreCase(packageType) && hoursUsed > 10) {
                 additionalChargeSubtotal = (hoursUsed - 10) * PACKAGE_A_ADDITIONAL_COST_PER_HOUR;
             }
@@ -166,28 +161,47 @@ public class MonthlyBillCalculator {
 
             //Calculate and display other package potential savings 
             //for customers of Package A IF they are eligible
-            if ("a".equalsIgnoreCase(packageType) && hoursUsed > 10) {
+            if ("a".equalsIgnoreCase(packageType) && hoursUsed >= 20) {
                 //If the total cost of the bill is greater than the base price of package B
                 //subtract the base cost package of package B from the bill total
                 if (billTotal > PACKAGE_B_COST) {
+                    var subtotalForPackageB = PACKAGE_B_COST + ((hoursUsed - 20) * 1) + surcharge;
+                    
+                    var discountAmount = subtotalForPackageB * countyDiscountPercentage;
+                    
+                    var totalForPackageB = subtotalForPackageB - discountAmount;
+                    
                     System.out.println("Package B Savings: " + "\t\t\t"
-                            + String.format("$%,.2f", billTotal - PACKAGE_B_COST));
+                            + String.format("$%,.2f", billTotal - totalForPackageB));
                 }
 
                 //If the total cost of the bill is greater than the base price of package C
                 //subtract the base cost package of package C from the bill total
                 if (billTotal > PACKAGE_C_COST) {
+                    var subtotalForPackageC = PACKAGE_C_COST + surcharge;
+                    
+                    var discountAmount = subtotalForPackageC * countyDiscountPercentage;
+                    
+                    var totalForPackageC = subtotalForPackageC - discountAmount;
+                    
                     System.out.println("Package C Savings: " + "\t\t\t"
-                            + String.format("$%,.2f", billTotal - PACKAGE_C_COST));
+                            + String.format("$%,.2f", billTotal - totalForPackageC));
                 }
-            } //Calculate and display other package potential savings 
+            } 
+            //Calculate and display other package potential savings 
             //for customers of Package B IF they are eligible
             else if ("b".equalsIgnoreCase(packageType) && hoursUsed > 20) {
                 //If the total cost of the bill is greater than the base price of package C
                 //subtract the base cost package of package C from the bill total
                 if (billTotal > PACKAGE_C_COST) {
+                    var subtotalForPackageC = PACKAGE_C_COST + surcharge;
+                    
+                    var discountAmount = subtotalForPackageC * countyDiscountPercentage;
+                    
+                    var totalForPackageC = subtotalForPackageC - discountAmount;
+                    
                     System.out.println("Package C Savings: " + "\t\t\t"
-                            + String.format("$%,.2f", billTotal - PACKAGE_C_COST));
+                            + String.format("$%,.2f", billTotal - totalForPackageC));
                 }
             }
         }
