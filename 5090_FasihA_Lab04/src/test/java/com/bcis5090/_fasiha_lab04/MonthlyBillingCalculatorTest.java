@@ -47,7 +47,7 @@ public class MonthlyBillingCalculatorTest {
         int hoursUsed = 60;
         double expected = (hoursUsed - 10) * PACKAGE_A_ADDITIONAL_COST_PER_HOUR;
         double result = MonthlyBillingCalculator.calculateAdditionalCharge(packageType, hoursUsed);
-        assertEquals(100, result);
+        assertEquals(expected, result);
     }
     
     @Test
