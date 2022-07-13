@@ -29,6 +29,8 @@ public class MonthlyBillingCalculator {
         var hoursUsed = scanner.nextInt();
 
         while (hoursUsed != -1) {
+            //After the first customer entry, collect hours used here.
+            //Reason: the original assignment (line 29) is no longer accessible during the iteration.
             if (totalCustomers >= 1) {
                 System.out.println("Enter hours used: ");
                 hoursUsed = scanner.nextInt();
