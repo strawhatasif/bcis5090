@@ -2,9 +2,9 @@
 Asif Fasih
 001040771
 August 03, 2022
-July 05, 2022
+July 16, 2022
 This class contains attributes used by  MonthlyBillCalculator.java
- */
+*/
 package com.bcis5090._fasiha_lab05;
 
 public class MonthlyBill {
