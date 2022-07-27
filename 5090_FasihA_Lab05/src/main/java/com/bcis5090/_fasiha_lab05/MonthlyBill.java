@@ -225,9 +225,11 @@ public class MonthlyBill {
                 var discountAmount = subtotalForPackageB * countyDiscountPercentage;
 
                 var totalForPackageB = subtotalForPackageB - discountAmount;
+                
+                var packageBSavings = billTotal - totalForPackageB;
 
                 System.out.println("Package B Savings: " + "\t\t\t\t"
-                        + String.format("$%,.2f", billTotal - totalForPackageB));
+                        + String.format("$%,.2f", packageBSavings));
             }
 
             //If the total cost of the bill is greater than the base price of package C
@@ -239,9 +241,11 @@ public class MonthlyBill {
                 var discountAmount = subtotalForPackageC * countyDiscountPercentage;
 
                 var totalForPackageC = subtotalForPackageC - discountAmount;
+                
+                var packageCSavings =  billTotal - totalForPackageC;
 
                 System.out.println("Package C Savings: " + "\t\t\t\t"
-                        + String.format("$%,.2f", billTotal - totalForPackageC));
+                        + String.format("$%,.2f", packageCSavings));
 
                 System.out.println("\n");
             }
@@ -258,9 +262,11 @@ public class MonthlyBill {
                 var discountAmount = subtotalForPackageC * countyDiscountPercentage;
 
                 var totalForPackageC = subtotalForPackageC - discountAmount;
+                
+                var packageCSavings = billTotal - totalForPackageC;
 
                 System.out.println("Package C Savings: " + "\t\t\t\t"
-                        + String.format("$%,.2f", billTotal - totalForPackageC));
+                        + String.format("$%,.2f", packageCSavings));
 
                 System.out.println("\n");
             }

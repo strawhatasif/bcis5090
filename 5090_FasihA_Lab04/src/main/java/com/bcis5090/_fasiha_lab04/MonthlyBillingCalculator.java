@@ -2,9 +2,9 @@
 Asif Fasih
 001040771
 July 20, 2022
-July 05, 2022
+July 16, 2022
 This program calculates a customer's monthly bill based on usage, location (zip code, county), and package
- */
+*/
 package com.bcis5090._fasiha_lab04;
 
 import java.util.Scanner;
@@ -30,20 +30,6 @@ public class MonthlyBillingCalculator {
         var hoursUsed = scanner.nextInt();
 
         while (hoursUsed != -1) {
-            //After the first customer entry, collect hours used here.
-            //Reason: the original assignment (line 29) is no longer accessible during the iteration.
-            if (totalCustomers >= 1) {
-                System.out.println("Enter hours used: ");
-                hoursUsed = scanner.nextInt();
-
-                //Printing a message and gracefully exiting the program if a user enters -1.
-                if (hoursUsed == -1) {
-                    System.out.println("Good-bye!");
-                    scanner.close();
-                    return;
-                }
-            }
-
             //Validate that hours used is greater than zero hours. 
             while (hoursUsed <= 0) {
                 System.out.println("Invalid hours used. Must be greater than zero. Try again: ");
@@ -85,9 +71,8 @@ public class MonthlyBillingCalculator {
             //Converting to upperCase in case the user enters a lower case value.
             packageType = packageType.toUpperCase();
             countyName = countyName.toUpperCase();
-            
-            //Validation complete, commence calculation!
 
+            //Validation complete, commence calculation!
             double baseCharge = determineBaseCharge(packageType);
             double additionalCharge = calculateAdditionalCharge(packageType, hoursUsed);
             double surcharge = determineZipCodeSurcharge(zipCode.charAt(0));
@@ -95,23 +80,23 @@ public class MonthlyBillingCalculator {
             var countyDiscountPercentage = determineCountyDiscountPercentage(countyName);
             var countyDiscount = calculateDiscountAmount(subtotal, countyDiscountPercentage);
             var billTotal = calculateBillTotal(subtotal, countyDiscount);
-            
+
             //Add the current discount to the running total for discount
             totalDiscount += countyDiscount;
             //Add the current bill's total to the overall running total
             totalCharge += billTotal;
-            
+
             totalCustomers++;
-            
+
             displayOutputForBill(packageType, baseCharge, additionalCharge, surcharge, subtotal, countyDiscount, billTotal, countyName, zipCode);
             calculateAndDisplayPotentialSavings(hoursUsed, packageType, surcharge, countyDiscountPercentage, billTotal);
+            
+            //After the first customer entry, collect hours used here.
+            //Reason: the original assignment (line 30) is no longer accessible during the iteration.
+            System.out.println("Enter hours used: ");
+            hoursUsed = scanner.nextInt();
         }
-
-        //Handling edge case where a user enters -1 for hoursUsed at the beginning
-        if (hoursUsed == -1) {
-            System.out.println("Good-bye!");
-        }
-
+        System.out.println("Good-bye!");
     }
 
     /**
@@ -285,7 +270,7 @@ public class MonthlyBillingCalculator {
      */
     protected static void calculateAndDisplayPotentialSavings(int hoursUsed, String packageType, double surcharge, double countyDiscountPercentage, double billTotal) {
         //Note: \t is a horizontal tab escape sequence. Each represents one tab
-        
+
         //Display running total for the number of customers.
         System.out.println("Total Discount Amount for All Packages:  \t" + String.format("$%,.2f", totalDiscount));
 
@@ -354,6 +339,5 @@ public class MonthlyBillingCalculator {
                 System.out.println("\n");
             }
         }
-
     }
 }
