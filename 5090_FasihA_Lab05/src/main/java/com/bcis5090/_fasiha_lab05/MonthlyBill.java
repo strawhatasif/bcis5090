@@ -2,7 +2,7 @@
 Asif Fasih
 001040771
 August 03, 2022
-July 16, 2022
+July 26, 2022
 This class contains attributes used by  MonthlyBillCalculator.java
 */
 package com.bcis5090._fasiha_lab05;
@@ -147,7 +147,9 @@ public class MonthlyBill {
      * @return subtotal
      */
     protected double calculateSubtotal() {
-        return determineBaseCharge() + calculateAdditionalCharge() + determineZipCodeSurcharge();
+        var subtotal = determineBaseCharge() + calculateAdditionalCharge() + determineZipCodeSurcharge();
+        
+        return subtotal;
     }
 
     /**
@@ -174,7 +176,9 @@ public class MonthlyBill {
      * @return discountAmount
      */
     protected double calculateDiscountAmount() {
-        return calculateSubtotal() * determineCountyDiscountPercentage();
+        var discountAmount = calculateSubtotal() * determineCountyDiscountPercentage();
+        
+        return discountAmount;
     }
 
     /**
@@ -184,7 +188,9 @@ public class MonthlyBill {
      * @return billTotal
      */
     protected double calculateBillTotal() {
-        return calculateSubtotal() - calculateDiscountAmount();
+        var total = calculateSubtotal() - calculateDiscountAmount();
+        
+        return total;
     }
 
     /**
@@ -278,9 +284,11 @@ public class MonthlyBill {
                 var discountAmount = subtotalForPackageB * countyDiscountPercentage;
 
                 var totalForPackageB = subtotalForPackageB - discountAmount;
+                
+                var packageBSavings = billTotal - totalForPackageB;
 
                 System.out.println("Package B Savings: " + "\t\t\t\t"
-                        + String.format("$%,.2f", billTotal - totalForPackageB));
+                        + String.format("$%,.2f", packageBSavings));
             }
 
             //If the total cost of the bill is greater than the base price of package C
@@ -292,9 +300,11 @@ public class MonthlyBill {
                 var discountAmount = subtotalForPackageC * countyDiscountPercentage;
 
                 var totalForPackageC = subtotalForPackageC - discountAmount;
+                
+                var packageCSavings =  billTotal - totalForPackageC;
 
                 System.out.println("Package C Savings: " + "\t\t\t\t"
-                        + String.format("$%,.2f", billTotal - totalForPackageC));
+                        + String.format("$%,.2f", packageCSavings));
 
                 System.out.println("\n");
             }
@@ -311,9 +321,11 @@ public class MonthlyBill {
                 var discountAmount = subtotalForPackageC * determineCountyDiscountPercentage();
 
                 var totalForPackageC = subtotalForPackageC - discountAmount;
+                
+                var packageCSavings = billTotal - totalForPackageC;
 
                 System.out.println("Package C Savings: " + "\t\t\t\t"
-                        + String.format("$%,.2f", billTotal - totalForPackageC));
+                        + String.format("$%,.2f", packageCSavings));
 
                 System.out.println("\n");
             }
