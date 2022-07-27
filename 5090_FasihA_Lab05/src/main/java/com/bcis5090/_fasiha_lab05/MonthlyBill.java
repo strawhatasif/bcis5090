@@ -50,15 +50,15 @@ public class MonthlyBill {
      * 0.00
      */
     protected double calculateAdditionalCharge(char packageType, int hours) {
-        double additionalCharge = 0.00;
+        additionalPackageCost = 0.00;
         if ('A' == packageType && hours > 10) {
-            additionalCharge = (hours - 10) * PACKAGE_A_ADDITIONAL_COST_PER_HOUR;
+            additionalPackageCost = (hours - 10) * PACKAGE_A_ADDITIONAL_COST_PER_HOUR;
         } 
         else if ('B' == packageType && hours > 20) {
-            additionalCharge = (hours - 20) * PACKAGE_B_ADDITIONAL_COST_PER_HOUR;
+            additionalPackageCost = (hours - 20) * PACKAGE_B_ADDITIONAL_COST_PER_HOUR;
         }
 
-        return additionalCharge;
+        return additionalPackageCost;
     }
 
     /**
